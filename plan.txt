@@ -1,0 +1,26 @@
+Manager, Freelancer, Evaluator : un array de structuri de tip "actor" care are urmatoarele proprietati ( mapping de la adresa la structura care contine numele, reputatie ( by default 5), si daca este freelance sau evaluator categorie de expertiza sau tarif minim pe ora)
+
+Daca creezi un task (completezi un form -) atunci adresa da este introdusa in array si True pe Manager. 
+- vizualizarea task-ului de catre manager
+- modificarea task-ului pana la prima aplicare
+- la crearea task-ului manager vireaza catre marketplace recompensa pentru freelance si pentru evaluator (retii in structura de tip task recompensele - sume aflate la adresa contractului )
+- managerul poate vizualiza evaluatori disponibili ( ceea ce presupune ca evaluatorii sa aiba ca domeniu de expertiza task-ul)
+- managerul poate selecta unul sau mai multi evaluatori
+- cand un evaluator accepta, task-ul va deveni vizibil pentru freelanceri
+- daca un manager anuleaza un task - i se returneaza recompensele
+
+
+Freelancer:
+- vizualizezi task-uri 
+- poti aplica pentru task-uri
+- la aplicare virezi catre marketplace asemenea maangerului o suma egala cu recompensa evaluatorului
+
+Daca aplica mai multi freelanceri, atunci cand managerul alege unul din ei, sumele blocate sunt returnate.
+La finalizarea task-ului ( completat un camp in structura task, ce semnifica ca a fost finalizat care reprezinta instructiunile necesare evaluari)
+Daca managerul este ok, suma virata de freelancer ii este returnata, suma virata de manager pentru evalator este returnata si se vireaza suma de la manager catre evaluator. + se face increment la reputatia managerului si cea a freelancerului
+
+In caz de refuz, este nevoie de arbitraj, intervine evaluatorul. Evaluatorul va avea o pagina/va fi notificat cand este nevoie sa evalueze un task, va primi detaliile task-ului. 2 cazuri dupa evaluare:
+1. managerul are dreptate: freelancerului i se iau banii pentru evaluator, iar managerul isi primeste ambele sume virate inapoi ( banii pt freelancer + banii pt evaluator), increment reputatie manager, decrement la freelancer
+2. freelancerul are dreptate: freelancerul va primi inapoi banii pentru evaluator si banii pe task, iar evaluatorul isi face primi banii doar de la manager, increment reputatie freelancer, decremetn reputatie manager
+
+Pentru task-uri : un array de structuri (descriere, recompensa freelance, recompensa evaluator oferita de manager,recompensa evaluator oferita de freelancer, domeniu de expertiza, timp estimat de evaluare, manager asociat, detalii evaluare, evaluator, freelanceri care au aplicat, freelancer ales, state-ul task-ului)
