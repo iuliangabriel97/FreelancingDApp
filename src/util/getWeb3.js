@@ -42,11 +42,6 @@ let getWeb3 = new Promise(function (resolve, reject) {
   .then(result => {
     return new Promise(function (resolve, reject) {
       // Retrieve coinbase
-      var tokenContract = web3.eth.contract(tokenABI)
-      var tokenContractInstance = tokenContract.at('0x5f40c64412eb356c56699821fe6c2ba065df5c35')
-      tokenContractInstance.balanceOf('0xd99e88b03324FB64fA007C9e295010fad381410b', function(error, res){console.log(res.toString() + 'FMLTKN')})
-
-
       result.web3().eth.getCoinbase((err, coinbase) => {
         if (err) {
           reject(new Error('Unable to retrieve coinbase'))
@@ -60,11 +55,14 @@ let getWeb3 = new Promise(function (resolve, reject) {
   .then(result => {
     return new Promise(function (resolve, reject) {
       // Retrieve balance for coinbase
-      result.web3().eth.getBalance(result.coinbase, (err, balance) => {
+            var tokenContract = web3.eth.contract(tokenABI)
+      var tokenContractInstance = tokenContract.at('0x5f40c64412eb356c56699821fe6c2ba065df5c35')
+      tokenContractInstance.balanceOf('0xd99e88b03324FB64fA007C9e295010fad381410b', function(err, res) {
         if (err) {
           reject(new Error('Unable to retrieve balance for address: ' + result.coinbase))
         } else {
-          result = Object.assign({}, result, { balance })
+          var balance = res.toString()
+          result = Object.assign({}, result, {balance})
           resolve(result)
         }
       })
