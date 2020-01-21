@@ -24,3 +24,8 @@ In caz de refuz, este nevoie de arbitraj, intervine evaluatorul. Evaluatorul va 
 2. freelancerul are dreptate: freelancerul va primi inapoi banii pentru evaluator si banii pe task, iar evaluatorul isi face primi banii doar de la manager, increment reputatie freelancer, decremetn reputatie manager
 
 Pentru task-uri : un array de structuri (descriere, recompensa freelance, recompensa evaluator oferita de manager,recompensa evaluator oferita de freelancer, domeniu de expertiza, timp estimat de evaluare, manager asociat, detalii evaluare, evaluator, freelanceri care au aplicat, freelancer ales, state-ul task-ului)
+
+Idei random:
+	*button tip switch pentru a alege intre manager/evaluator/evaluator
+	*nu poti avea mai multe roluri pentru acelasi task
+	*cum prevenim ca un user sa faca call-uri catre metodele contractului
