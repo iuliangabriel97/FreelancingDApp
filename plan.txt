@@ -29,3 +29,7 @@ Idei random:
 	*button tip switch pentru a alege intre manager/evaluator/evaluator
 	*nu poti avea mai multe roluri pentru acelasi task
 	*cum prevenim ca un user sa faca call-uri catre metodele contractului
+	*la unele functii pot folosi external in loc de public
+	*de verificat exact ce modificatori de acces trebuie folositi la fiecare functie
+	*pentru require-uri se poate folosi safemath
+	*de vazut cum se face transferul folosind contractul tokenului din Solidity Remix
