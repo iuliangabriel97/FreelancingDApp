@@ -270,4 +270,4 @@ const ABI = [
 		"type": "event"
 	}
 ]
-export {address, ABI}
+export { address, ABI }

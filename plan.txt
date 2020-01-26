@@ -33,3 +33,14 @@ Idei random:
 	*de verificat exact ce modificatori de acces trebuie folositi la fiecare functie
 	*pentru require-uri se poate folosi safemath
 	*de vazut cum se face transferul folosind contractul tokenului din Solidity Remix
+
+
+
+Interfata:
+	- se verifica daca userul este deja in baza de date
+		- daca da , atunci se duce direct la dashboard-ul corespunzator rolului
+		- daca nu, se vor afisa 3 butoane, register pentru manager / freelancer / evaluator
+	- pe dashboard se vor afisa o lista de task-uri ( create / ongoing)
+		- daca esti manager sa ai buton de creaza task + anulare task
+		- daca esti freelancer sa ai buton de aplica pentru task
+		- daca esti evaluator sa ai buton de evaluare task

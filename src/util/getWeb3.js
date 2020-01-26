@@ -16,7 +16,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
     var web3 = new Web3(web3js.currentProvider)
     resolve({
       injectedWeb3: web3.isConnected(),
-      web3 () {
+      web3() {
         return web3
       }
     })
@@ -33,7 +33,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
           reject(new Error('Unable to retrieve network ID'))
         } else {
           // Assign the networkId property to our result and resolve promise
-          result = Object.assign({}, result, {networkId})
+          result = Object.assign({}, result, { networkId })
           resolve(result)
         }
       })
@@ -57,12 +57,12 @@ let getWeb3 = new Promise(function (resolve, reject) {
       // Retrieve balance for coinbase
       var tokenContract = web3.eth.contract(tokenABI)
       var tokenContractInstance = tokenContract.at('0x5f40c64412eb356c56699821fe6c2ba065df5c35')
-      tokenContractInstance.balanceOf('0xd99e88b03324FB64fA007C9e295010fad381410b', function(err, res) {
+      tokenContractInstance.balanceOf('0xd99e88b03324FB64fA007C9e295010fad381410b', function (err, res) {
         if (err) {
           reject(new Error('Unable to retrieve balance for address: ' + result.coinbase))
         } else {
           var balance = res.toString()
-          result = Object.assign({}, result, {balance})
+          result = Object.assign({}, result, { balance })
           console.log("Result : " + result.balance)
           resolve(result)
         }

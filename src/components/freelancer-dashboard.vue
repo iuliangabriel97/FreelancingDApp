@@ -1,10 +1,9 @@
 <template>
-  <hello-metamask />
+  <p>freelancer dashboard</p>
 </template>
 <script>
-import HelloMetamask from "@/components/hello-metamask";
 export default {
-  name: "app",
+  name: "manager-dashboard",
   beforeCreate() {
     console.log("registerWeb3 Action dispatched from dapp.vue");
     this.$store.dispatch("registerWeb3");
@@ -15,10 +14,9 @@ export default {
     console.log("dipactching getTokenContractInstance");
     this.$store.dispatch("getTokenContractInstance");
   },
-  components: {
-    "hello-metamask": HelloMetamask
-  }
+  components: {}
 };
 </script>
 <style scoped>
 </style>
+
