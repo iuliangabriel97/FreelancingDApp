@@ -9,21 +9,21 @@ let pollWeb3 = function (state) {
     if (web3 && store.state.web3.web3Instance) {
       if (web3.eth.coinbase !== store.state.web3.coinbase) {
         let newCoinbase = web3.eth.coinbase
-        web3.eth.getBalance(web3.eth.coinbase, function (err, newBalance) {
+        store.state.TokenContractInstance().balanceOf(web3.eth.coinbase, function (err, newBalance) {
           if (err) {
             console.log(err)
           } else {
             store.dispatch('pollWeb3', {
               coinbase: newCoinbase,
-              balance: parseInt(newBalance, 10)
+              balance: newBalance.toString()
             })
           }
         })
       } else {
-        web3.eth.getBalance(store.state.web3.coinbase, (err, polledBalance) => {
+        store.state.TokenContractInstance().balanceOf(store.state.web3.coinbase, (err, polledBalance) => {
           if (err) {
             console.log(err)
-          } else if (parseInt(polledBalance, 10) !== store.state.web3.balance) {
+          } else if (polledBalance.toString() !== store.state.web3.balance) {
             store.dispatch('pollWeb3', {
               coinbase: store.state.web3.coinbase,
               balance: polledBalance

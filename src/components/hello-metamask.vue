@@ -17,10 +17,7 @@ export default {
     isInjected: state => state.web3.isInjected,
     network: state => NETWORKS[state.web3.networkId],
     coinbase: state => state.web3.coinbase,
-    balance: state => state.web3.balance,
-    ethBalance: state => {
-      if (state.web3.web3Instance !== null) return state.web3.web3Instance().fromWei(state.web3.balance, 'ether')
-    }
+    balance: state => state.web3.balance
   })
 }
 </script>

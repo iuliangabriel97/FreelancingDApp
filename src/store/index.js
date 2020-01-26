@@ -4,6 +4,7 @@ import state from './state'
 import getWeb3 from '../util/getWeb3'
 import pollWeb3 from '../util/pollWeb3'
 import getContract from '../util/getContract'
+import getTokenContract from '../util/getTokenContract'
 
 Vue.use(Vuex)
 export const store = new Vuex.Store({
@@ -26,11 +27,16 @@ export const store = new Vuex.Store({
       console.log('pollWeb3Instance mutation being executed', payload)
       state.web3.coinbase = payload.coinbase
       state.web3.balance = parseInt(payload.balance, 10)
+      console.log('state.web3.balance' + state.web3.balance)
       },
       registerContractInstance (state, payload) {
         console.log('FreelancingMarketplace contract instance:', payload)
         state.contractInstance = () => payload
-        }
+        },
+      registerTokenContractInstance (state, payload) {
+          console.log('Token contract instance:', payload)
+          state.TokenContractInstance = () => payload
+          }
   },
  actions: {
    registerWeb3 ({commit}) {
@@ -46,10 +52,15 @@ export const store = new Vuex.Store({
     console.log('pollWeb3 action being executed')
     commit('pollWeb3Instance', payload)
     },
-    getContractInstance ({commit}) {
+  getContractInstance ({commit}) {
       getContract.then(result => {
       commit('registerContractInstance', result)
       }).catch(e => console.log(e))
-      }
+      },
+  getTokenContractInstance ({commit}) {
+        getTokenContract.then(result => {
+        commit('registerTokenContractInstance', result)
+        }).catch(e => console.log(e))
+        }
 }
 })

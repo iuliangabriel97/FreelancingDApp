@@ -7,6 +7,7 @@ let state = {
     balance: null,
     error: null
     },
-    contractInstance: null
+    contractInstance: null,
+    TokenContractInstance: null
    }
    export default state

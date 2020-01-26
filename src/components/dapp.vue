@@ -12,6 +12,8 @@ export default {
   mounted () {
  console.log('dispatching getContractInstance')
  this.$store.dispatch('getContractInstance')
+ console.log('dipactching getTokenContractInstance')
+ this.$store.dispatch('getTokenContractInstance')
  },
  components: {
  'hello-metamask': HelloMetamask
