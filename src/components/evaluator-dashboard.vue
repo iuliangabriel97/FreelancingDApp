@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: "manager-dashboard",
+  name: "evaluator-dashboard",
   beforeCreate() {
     console.log("registerWeb3 Action dispatched from dapp.vue");
     this.$store.dispatch("registerWeb3");

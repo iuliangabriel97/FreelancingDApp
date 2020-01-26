@@ -34,12 +34,12 @@
             size="lg"
           >Register as Manager</b-button>
           <b-button
-            v-on:click="redirectToManagerPage"
+            v-on:click="redirectToFreelancerPage"
             variant="info"
             size="lg"
           >Register as Freelancer</b-button>
           <b-button
-            v-on:click="redirectToManagerPage"
+            v-on:click="redirectToEvaluatorPage"
             variant="warning"
             size="lg"
           >Register as Evaluator</b-button>
