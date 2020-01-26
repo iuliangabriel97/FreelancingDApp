@@ -43,6 +43,7 @@ contract FreelancingMarketplace
 
         TaskStatus status;
         address[] applicants;
+        string notification;
 
         uint estimatedResolveTime;
         uint estimatedEvaluationTime;
@@ -123,10 +124,14 @@ constructor(address _tokenAddress) public {
             newTask.managerAddress = managerAddress;
             newTask.freelancerAddress = address(0);
             newTask.evaluatorAddress = evaluatorAddress;
+
             newTask.title = title;
             newTask.description = description;
             newTask.domain = domain;
+
             newTask.status = TaskStatus.WaitingApplications;
+            newTask.notification = "";
+
             newTask.estimatedResolveTime = estResolveTime;
             newTask.estimatedEvaluationTime = estEvalTime;
             newTask.freelancerPayout = freelancerPay;
@@ -199,6 +204,7 @@ constructor(address _tokenAddress) public {
 
     // manager
 
+    // CALL APPROVE as MANAGER for totalAmount
     function mCreateTask(
         address evaluatorAddress,
         string memory title,
@@ -213,7 +219,6 @@ constructor(address _tokenAddress) public {
         require(users[evaluatorAddress].role == Role.Evaluator, 'Chosen evaluator does not have evaluator role');
         uint totalAmount = freelancerPay + evaluatorPay;
         require(token.balanceOf(msg.sender) > totalAmount, 'Insufficient funds');
-        // CALL APPROVE as MANAGER for totalAmount
         token.transferFrom(msg.sender, address(this), totalAmount);
         addTask(
             msg.sender,
@@ -229,6 +234,7 @@ constructor(address _tokenAddress) public {
     }
 
     function mGetActiveTasksNumber() public view returns (uint) {
+        require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
         uint number = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
             if (activeTasks[i].managerAddress == msg.sender) {
@@ -262,6 +268,8 @@ constructor(address _tokenAddress) public {
         require(users[freelancerAddress].role == Role.Freelancer, 'Chosen freelancer does not have a freelancer role');
         uint taskIndex = getActiveTaskIndex(taskId);
         require(activeTasks[taskIndex].managerAddress == msg.sender, 'Operation cand only be performed by the task owner');
+        require(activeTasks[taskIndex].status == TaskStatus.WaitingApplications, 'Task is past application stages');
+        require(activeTasks[taskIndex].freelancerAddress == address(0), 'Freelancer already chosen');
         bool foundApplicant = false;
         for (uint i = 0; i < activeTasks[taskIndex].applicants.length; i++) {
             if (activeTasks[taskIndex].applicants[i] == freelancerAddress) {
@@ -271,12 +279,42 @@ constructor(address _tokenAddress) public {
         }
         require(foundApplicant, 'Chosen freelancer has not applied for this task');
 
+        for (uint i = 0; i < activeTasks[taskIndex].applicants.length; i++) {
+            if (activeTasks[taskIndex].applicants[i] != freelancerAddress) {
+                token.transfer(activeTasks[taskIndex].applicants[i], activeTasks[taskIndex].evaluatorPayout);
+            }
+        }
+
         activeTasks[taskIndex].freelancerAddress = freelancerAddress;
         activeTasks[taskIndex].status = TaskStatus.Working;
     }
 
+    function mAcceptTask(uint taskId) public {
+        require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
+        uint taskIndex = getActiveTaskIndex(taskId);
+        require(activeTasks[taskIndex].status == TaskStatus.Complete, 'Task not completed');
+        require(activeTasks[taskIndex].managerAddress == msg.sender, 'Operation cand only be performed by the task owner');
+        activeTasks[taskIndex].status = TaskStatus.Finished;
+        
+        token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].freelancerPayout);
+        token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
+        
+        inactiveTasks.push(activeTasks[taskIndex]);
+        activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+    }
+    
+    function mRequestEvaluation(uint taskId) public {
+        require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
+        uint taskIndex = getActiveTaskIndex(taskId);
+        require(activeTasks[taskIndex].status == TaskStatus.Complete, 'Task not completed');
+        require(activeTasks[taskIndex].managerAddress == msg.sender, 'Operation cand only be performed by the task owner');
+        
+        activeTasks[taskIndex].status = TaskStatus.WaitingEvaluation;
+    }
+
     // freelancer
 
+    // CALL APPROVE as FREELANCER for evaluatorPay
     function fApplyForTask(uint taskId) public {
         require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
         uint taskIndex = getActiveTaskIndex(taskId);
@@ -285,10 +323,42 @@ constructor(address _tokenAddress) public {
                 revert('User already applied for the task');
             }
         }
-        // CALL APPROVE as FREELANCER for evaluatorPay
         token.transferFrom(msg.sender, address(this), activeTasks[taskIndex].evaluatorPayout);
         activeTasks[taskIndex].applicants.push(msg.sender);
     }
+
+    function fSetTaskComplete(uint taskId, string memory notificationMessage) public {
+        require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
+        uint taskIndex = getActiveTaskIndex(taskId);
+        require(activeTasks[taskIndex].freelancerAddress == msg.sender, 'Operation can only be performed by the assigned freelancer');
+        activeTasks[taskIndex].status = TaskStatus.Complete;
+        activeTasks[taskIndex].notification = notificationMessage;
+    }
+
+    function fGetActiveTasksNumber() public view returns (uint) {
+        require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
+        uint number = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].freelancerAddress == msg.sender) {
+                number++;
+            }
+        }
+        return number;
+    }
+
+    function fGetTaskByIndex(uint taskIndex) public view returns (Task memory) {
+        require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
+        uint index = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].freelancerAddress == msg.sender) {
+                if (taskIndex == index) {
+                    return activeTasks[i];
+                }
+                index++;
+            }
+        }
+    }
+
 /*
     function setFirstName(address _address, string memory _fName) public {
         Persons[_address]._firstName = _fName;
