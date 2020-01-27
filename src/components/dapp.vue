@@ -1,6 +1,6 @@
 <template>
   <hello-metamask />
-</template>
+</template> 
 <script>
 import HelloMetamask from "@/components/hello-metamask";
 export default {

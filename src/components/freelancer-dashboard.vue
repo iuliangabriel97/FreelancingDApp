@@ -1,7 +1,11 @@
 <template>
-  <p>freelancer dashboard</p>
+  <div>
+    <choose-task />
+    <p>freelancer dashboard</p>
+  </div>
 </template>
 <script>
+import ChooseTask from "@/components/choose-task";
 export default {
   name: "freelancer-dashboard",
   beforeCreate() {
@@ -14,7 +18,7 @@ export default {
     console.log("dipactching getTokenContractInstance");
     this.$store.dispatch("getTokenContractInstance");
   },
-  components: {}
+  components: { "choose-task": ChooseTask }
 };
 </script>
 <style scoped>

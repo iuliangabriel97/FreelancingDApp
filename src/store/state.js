@@ -8,6 +8,11 @@ let state = {
         error: null
     },
     contractInstance: null,
-    TokenContractInstance: null
+    TokenContractInstance: null,
+    authUser: null,
+    requiresRegister: false,
+    managerAuth: false,
+    freelancerAuth: false,
+    evaluatorAuth: false
 }
 export default state

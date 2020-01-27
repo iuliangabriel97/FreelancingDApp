@@ -12,19 +12,13 @@
       <p>Balance: {{ balance }} FMLTKN</p>
     </div>
     <b-jumbotron>
-      <template v-slot:header>BootstrapVue</template>
+      <template v-slot:header>Freelancing Marketplace</template>
 
-      <template v-slot:lead>
-        This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-        featured content or information.
-      </template>
+      <template v-slot:lead>Using Ropsten Test Network</template>
 
       <hr class="my-4" />
 
-      <p>
-        It uses utility classes for typography and spacing to space content out within the larger
-        container.
-      </p>
+      <p></p>
 
       <div class="mt-3">
         <b-button-group>
@@ -44,6 +38,10 @@
             size="lg"
           >Register as Evaluator</b-button>
         </b-button-group>
+
+        <div class="mt-2">
+          <b-form-input v-model="username" placeholder="Enter your name"></b-form-input>
+        </div>
       </div>
     </b-jumbotron>
   </div>
@@ -63,7 +61,10 @@ export default {
   }),
   methods: {
     redirectToManagerPage: function(event) {
-      this.$router.push("/manager");
+      this.$router.push({ path: "/manager" });
+      this.$store.contractInstance.register(username, function(err, res) {
+        console.log(err, res);
+      });
     },
     redirectToFreelancerPage: function(event) {
       this.$router.push("/freelancer");

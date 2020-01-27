@@ -1,5 +1,7 @@
 import Web3 from 'web3'
+import { store } from '../store/'
 import tokenABI from './contracts/fml_token_abi.json'
+
 /*
 * 1. Check for injected web3 (mist/metamask)
 * 2. If metamask/mist create a new web3 instance and pass on result
@@ -11,7 +13,6 @@ import tokenABI from './contracts/fml_token_abi.json'
 let getWeb3 = new Promise(function (resolve, reject) {
   // Check for injected web3 (mist/metamask)
   var web3js = window.web3
-  console.log(web3js)
   if (typeof web3js !== 'undefined') {
     var web3 = new Web3(web3js.currentProvider)
     resolve({
@@ -54,16 +55,15 @@ let getWeb3 = new Promise(function (resolve, reject) {
   })
   .then(result => {
     return new Promise(function (resolve, reject) {
-      // Retrieve balance for coinbase
+      // Retrieve balance for coinbase)
       var tokenContract = web3.eth.contract(tokenABI)
       var tokenContractInstance = tokenContract.at('0x5f40c64412eb356c56699821fe6c2ba065df5c35')
-      tokenContractInstance.balanceOf('0xd99e88b03324FB64fA007C9e295010fad381410b', function (err, res) {
+      tokenContractInstance.balanceOf(result.coinbase, function (err, res) {
         if (err) {
           reject(new Error('Unable to retrieve balance for address: ' + result.coinbase))
         } else {
           var balance = res.toString()
           result = Object.assign({}, result, { balance })
-          console.log("Result : " + result.balance)
           resolve(result)
         }
       })

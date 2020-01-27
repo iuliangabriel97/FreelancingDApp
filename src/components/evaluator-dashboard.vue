@@ -1,9 +1,8 @@
 <template>
-  <p>evaluator dashboard</p>
 </template>
 <script>
 export default {
-  name: "evaluator-dashboard",
+  name: "Evaluator",
   beforeCreate() {
     console.log("registerWeb3 Action dispatched from dapp.vue");
     this.$store.dispatch("registerWeb3");

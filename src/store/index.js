@@ -11,6 +11,14 @@ export const store = new Vuex.Store({
   strict: true,
   state,
   mutations: {
+    registerContractInstance(state, payload) {
+      console.log('FreelancingMarketplace contract instance:', payload)
+      state.contractInstance = () => payload
+    },
+    registerTokenContractInstance(state, payload) {
+      console.log('Token contract instance:', payload)
+      state.TokenContractInstance = () => payload
+    },
     registerWeb3Instance(state, payload) {
       console.log('registerWeb3instance Mutation being executed', payload)
       let result = payload
@@ -23,22 +31,32 @@ export const store = new Vuex.Store({
       state.web3 = web3Copy
       pollWeb3()
     },
+    registerUserAuth(state, payload) {
+      console.log('Payload: ' + payload)
+      state.userAuth = payload;
+    },
     pollWeb3Instance(state, payload) {
       console.log('pollWeb3Instance mutation being executed', payload)
       state.web3.coinbase = payload.coinbase
       state.web3.balance = parseInt(payload.balance, 10)
-      console.log('state.web3.balance' + state.web3.balance)
-    },
-    registerContractInstance(state, payload) {
-      console.log('FreelancingMarketplace contract instance:', payload)
-      state.contractInstance = () => payload
-    },
-    registerTokenContractInstance(state, payload) {
-      console.log('Token contract instance:', payload)
-      state.TokenContractInstance = () => payload
     }
   },
   actions: {
+    getContractInstance({ commit }) {
+      getContract.then(result => {
+        commit('registerContractInstance', result)
+      }).catch(e => console.log(e))
+    },
+    getUserRole({ commit }) {
+      store.state.contractInstance().debug_myRole().then(result => {
+        commit('registerUserAuth', result)
+      }).catch(e => console.log(e));
+    },
+    getTokenContractInstance({ commit }) {
+      getTokenContract.then(result => {
+        commit('registerTokenContractInstance', result)
+      }).catch(e => console.log(e))
+    },
     registerWeb3({ commit }) {
       console.log('registerWeb3 Action being executed')
       getWeb3.then(result => {
@@ -51,16 +69,6 @@ export const store = new Vuex.Store({
     pollWeb3({ commit }, payload) {
       console.log('pollWeb3 action being executed')
       commit('pollWeb3Instance', payload)
-    },
-    getContractInstance({ commit }) {
-      getContract.then(result => {
-        commit('registerContractInstance', result)
-      }).catch(e => console.log(e))
-    },
-    getTokenContractInstance({ commit }) {
-      getTokenContract.then(result => {
-        commit('registerTokenContractInstance', result)
-      }).catch(e => console.log(e))
     }
   }
 })
