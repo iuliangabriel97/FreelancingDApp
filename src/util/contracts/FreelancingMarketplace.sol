@@ -165,6 +165,16 @@ constructor(address _tokenAddress) public {
         revert('Task not found');
     }
 
+    function userAppliedToTask(address user, uint taskId) public view returns (bool) {
+        uint taskIndex = getActiveTaskIndex(taskId);
+        for (uint i = 0; i < activeTasks[taskIndex].applicants.length; i++) {
+            if (activeTasks[taskIndex].applicants[i] == user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 // ---------- External functions  ----------
 
     // debug
@@ -202,6 +212,11 @@ constructor(address _tokenAddress) public {
         addUser(msg.sender, name, role);
     }
 
+    function getActiveTaskById(uint taskId) public view returns (Task memory) {
+        uint taskIndex = getActiveTaskIndex(taskId);
+        return activeTasks[taskIndex];
+    }
+
     // manager
 
     // CALL APPROVE as MANAGER for totalAmount
@@ -233,28 +248,24 @@ constructor(address _tokenAddress) public {
         );
     }
 
-    function mGetActiveTasksNumber() public view returns (uint) {
+    function mGetActiveTasks() public view returns (uint[] memory) {
         require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
-        uint number = 0;
+
+        uint numberOfTasks = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
             if (activeTasks[i].managerAddress == msg.sender) {
-                number++;
+                numberOfTasks++;
             }
         }
-        return number;
-    }
-    
-    function mGetTaskByIndex(uint taskIndex) public view returns (Task memory) {
-        require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
-        uint index = 0;
+
+        uint[] memory tasks = new uint[](numberOfTasks);
+        uint counter = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
             if (activeTasks[i].managerAddress == msg.sender) {
-                if (taskIndex == index) {
-                    return activeTasks[i];
-                }
-                index++;
+                tasks[counter++] = activeTasks[i].id;
             }
         }
+        return tasks;
     }
 
     function mGetTaskApplicants(uint taskId) public view returns (address[] memory) {
@@ -299,8 +310,17 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].freelancerPayout);
         token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
         
+        if (activeTasks[taskIndex].managerAddress < 10) {
+            users[activeTasks[taskIndex].managerAddress].reputation += 1;
+        }
+
+        if (activeTasks[taskIndex].freelancerAddress < 10) {
+            users[activeTasks[taskIndex].freelancerAddress].reputation += 1;
+        }
+
         inactiveTasks.push(activeTasks[taskIndex]);
         activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+        activeTasks.length--;
     }
     
     function mRequestEvaluation(uint taskId) public {
@@ -318,11 +338,7 @@ constructor(address _tokenAddress) public {
     function fApplyForTask(uint taskId) public {
         require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
         uint taskIndex = getActiveTaskIndex(taskId);
-        for (uint i = 0; i < activeTasks[taskIndex].applicants.length; i++) {
-            if (activeTasks[taskIndex].applicants[i] == msg.sender) {
-                revert('User already applied for the task');
-            }
-        }
+        require(!userAppliedToTask(msg.sender, taskId), 'User already applied for the task');
         token.transferFrom(msg.sender, address(this), activeTasks[taskIndex].evaluatorPayout);
         activeTasks[taskIndex].applicants.push(msg.sender);
     }
@@ -335,54 +351,86 @@ constructor(address _tokenAddress) public {
         activeTasks[taskIndex].notification = notificationMessage;
     }
 
-    function fGetActiveTasksNumber() public view returns (uint) {
+    function fGetActiveTasks() public view returns (uint[] memory) {
         require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
-        uint number = 0;
+
+        uint numberOfTasks = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
             if (activeTasks[i].freelancerAddress == msg.sender) {
-                number++;
+                numberOfTasks++;
             }
         }
-        return number;
+
+        uint[] memory tasks = new uint[](numberOfTasks);
+        uint counter = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].freelancerAddress == msg.sender) {
+                tasks[counter++] = activeTasks[i].id;
+            }
+        }
+        return tasks;
     }
 
-    function fGetTaskByIndex(uint taskIndex) public view returns (Task memory) {
+    function fGetAppliedTasks() public view returns (uint[] memory) {
         require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
-        uint index = 0;
+
+        uint numberOfTasks = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
-            if (activeTasks[i].freelancerAddress == msg.sender) {
-                if (taskIndex == index) {
-                    return activeTasks[i];
-                }
-                index++;
+            if (userAppliedToTask(msg.sender, activeTasks[i].id)) {
+                numberOfTasks++;
             }
         }
+
+        uint[] memory tasks = new uint[](numberOfTasks);
+        uint counter = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (userAppliedToTask(msg.sender, activeTasks[i].id)) {
+                tasks[counter++] = activeTasks[i].id;
+            }
+        }
+        return tasks;
+    }
+
+    function fGetAvailableTasks() public view returns (uint[] memory) {
+        require(users[msg.sender].role == Role.Freelancer, 'Operation can only be performed by a freelancer');
+
+        uint numberOfTasks = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (!userAppliedToTask(msg.sender, activeTasks[i].id)) {
+                numberOfTasks++;
+            }
+        }
+
+        uint[] memory tasks = new uint[](numberOfTasks);
+        uint counter = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (!userAppliedToTask(msg.sender, activeTasks[i].id)) {
+                tasks[counter++] = activeTasks[i].id;
+            }
+        }
+        return tasks;
     }
 
     // evaluator
 
-    function eGetActiveTasksNumber() public view returns (uint) {
-        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by a evaluator');
-        uint number = 0;
-        for (uint i = 0; i < activeTasks.length; i++) {
-            if (activeTasks[i].evaluatorAddress == msg.sender) {
-                number++;
-            }
-        }
-        return number;
-    }
+    function eGetActiveTasks() public view returns (uint[] memory) {
+        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by an evaluator');
 
-    function eGetTaskByIndex(uint taskIndex) public view returns (Task memory) {
-        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by a evaluator');
-        uint index = 0;
+        uint numberOfTasks = 0;
         for (uint i = 0; i < activeTasks.length; i++) {
-            if (activeTasks[i].evaluatorAddress == msg.sender) {
-                if (taskIndex == index) {
-                    return activeTasks[i];
-                }
-                index++;
+            if (activeTasks[i].evaluatorAddress == msg.sender && activeTasks[i].status == TaskStatus.WaitingEvaluation) {
+                numberOfTasks++;
             }
         }
+
+        uint[] memory tasks = new uint[](numberOfTasks);
+        uint counter = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].evaluatorAddress == msg.sender && activeTasks[i].status == TaskStatus.WaitingEvaluation) {
+                tasks[counter++] = activeTasks[i].id;
+            }
+        }
+        return tasks;
     }
 
     // freelancer wins
@@ -397,8 +445,17 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].evaluatorPayout);
         token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
         
+        if (activeTasks[taskIndex].managerAddress > 1) {
+            users[activeTasks[taskIndex].managerAddress].reputation -= 1;
+        }
+
+        if (activeTasks[taskIndex].freelancerAddress < 10) {
+            users[activeTasks[taskIndex].freelancerAddress].reputation += 1;
+        }
+
         inactiveTasks.push(activeTasks[taskIndex]);
         activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+        activeTasks.length--;
     }
 
     // manager wins
@@ -413,133 +470,18 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
         token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
         
+        if (activeTasks[taskIndex].managerAddress < 10) {
+            users[activeTasks[taskIndex].managerAddress].reputation += 1;
+        }
+
+        if (activeTasks[taskIndex].freelancerAddress > 1) {
+            users[activeTasks[taskIndex].freelancerAddress].reputation -= 1;
+        }
+
         inactiveTasks.push(activeTasks[taskIndex]);
         activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+        activeTasks.length--;
     }
-
-/*
-    function setFirstName(address _address, string memory _fName) public {
-        Persons[_address]._firstName = _fName;
-    }
-
-    function setFirsLastName(address _address, string memory _lName) public {
-        Persons[_address]._lastName = _lName;
-    }
-
-    function setManagerRole(address _address, bool _bool) public {
-        Persons[_address]._managerRole = _bool;
-    }
-
-    function setFreelancerRole(address _address, bool _bool) public {
-        Persons[_address]._freelancerRole = _bool;
-    }
-
-    function setEvaluatorRole(address _address, bool _bool) public {
-        Persons[_address]._evaluatorRole = _bool;
-    }
-
-    function isManager(address _address) internal returns(bool) {
-        return Persons[_address]._managerRole == true;
-    }
-
-    function isEvaluator(address _address) internal returns(bool) {
-        return Persons[_address]._evaluatorRole == true;
-    }
-
-    function isFreelancer(address _address) internal returns(bool) {
-        return Persons[_address]._freelancerRole == true;
-    }
-
-    function modifyReputation(address _address, int256 _value) internal {
-        (string memory _fName, string memory _lName, int256 _currReputation) = getPerson(_address);
-        Persons[_address]._reputation = _currReputation + _value;
-    }
-
-    function addTask(
-        address _address,
-        string memory description,
-        string memory domain,
-        uint estimatedResolveTime,
-        uint estimatedEvaluationTime,
-        uint rewardAmountFreelancer,
-        uint rewardAmountEvaluator)
-        public payable {
-        require(isManager(_address) == true, 'Only manager can add tasks!');
-        require(rewardAmountEvaluator + rewardAmountFreelancer <= msg.value, 'msg.value less than expected');
-        Tasks.push(Task(
-            address(0),
-            address(0),
-            TaskStatus.Waiting,
-            description,
-            domain,
-            estimatedResolveTime,
-            estimatedEvaluationTime,
-            rewardAmountFreelancer,
-            rewardAmountEvaluator));
-    }
-
-    function getTask(address _address) public view returns(address, address, TaskStatus)
-    {
-        return (Tasks[_address]._freelancerAddress, Tasks[_address]._evaluatorAddress, Tasks[_address]._taskStatus);
-    }
-
-    function isTaskWaiting(address _address) public returns(bool){
-        return Tasks[_address]._taskStatus == TaskStatus.Waiting;
-    }
-
-    function isTaskRunning(address _address) public returns(bool){
-        return Tasks[_address]._taskStatus == TaskStatus.Running;
-    }
-
-    function isTaskSolved(address _address) public returns(bool){
-        return Tasks[_address]._taskStatus == TaskStatus.Solved;
-    }
-
-    function setTaskEvaluator(address _address, address evaluatorrAddress) public {
-        Tasks[_address]._evaluatorAddress = evaluatorrAddress;
-    }
-
-    function setTaskFreelancer(address _address, address freelancerAddress) public {
-        Tasks[_address]._freelancerAddress = freelancerAddress;
-    }
-
-    function setTaskWaiting(address _address) public{
-        Tasks[_address]._taskStatus = TaskStatus.Waiting;
-    }
-
-    function setTaskRunning(address _address) public{
-        Tasks[_address]._taskStatus = TaskStatus.Running;
-    }
-
-    function setTaskNeedingEvaluation(address _address) public{
-        Tasks[_address]._taskStatus = TaskStatus.NeedingEvaluation;
-    }
-
-    function setTaskFinished(address _address) public payable{
-        require(msg.sender != Tasks[_address]._freelancerAddress, "Freelancer of task cannot mark task as finished");
-        Tasks[_address]._taskStatus = TaskStatus.Finished;
-    }
-
-    function setTaskSolved(address _address) public{
-        Task memory _task = Tasks[_address];
-        require(_task._taskStatus == TaskStatus.Running, 'Task should be running before being marked as solved');
-        _task._taskStatus = TaskStatus.Successfull;
-        Tasks[_address]._taskStatus = TaskStatus.Solved;
-    }
-    function setTaskSuccessfull(address _address) public payable{
-        Task memory _task = Tasks[_address];
-        require(_task._evaluatorAddress == _address, 'Only the evaluator can mark the task as Successfull!');
-        _task._taskStatus = TaskStatus.Successfull;
-        modifyReputation(_task._freelancerAddress, 1);
-    }
-
-    function setTaskFail(address _address) public payable{
-        Task memory _task = Tasks[_address];
-        require(_task._evaluatorAddress == _address, 'Only the evaluator can mark the task as Fail!');
-        _task._taskStatus = TaskStatus.Fail;
-        modifyReputation(_task._freelancerAddress, -1);
-    }
-*/
 
     function() external payable{} //Fallback function
 
