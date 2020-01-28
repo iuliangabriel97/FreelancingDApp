@@ -359,6 +359,64 @@ constructor(address _tokenAddress) public {
         }
     }
 
+    // evaluator
+
+    function eGetActiveTasksNumber() public view returns (uint) {
+        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by a evaluator');
+        uint number = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].evaluatorAddress == msg.sender) {
+                number++;
+            }
+        }
+        return number;
+    }
+
+    function eGetTaskByIndex(uint taskIndex) public view returns (Task memory) {
+        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by a evaluator');
+        uint index = 0;
+        for (uint i = 0; i < activeTasks.length; i++) {
+            if (activeTasks[i].evaluatorAddress == msg.sender) {
+                if (taskIndex == index) {
+                    return activeTasks[i];
+                }
+                index++;
+            }
+        }
+    }
+
+    // freelancer wins
+    function eGiveVerdictForFreelancer(uint taskId) public {
+        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by an evaluator');
+        uint taskIndex = getActiveTaskIndex(taskId);
+        require(activeTasks[taskIndex].status == TaskStatus.WaitingEvaluation, 'Task not awaiting evaluation');
+        require(activeTasks[taskIndex].evaluatorAddress == msg.sender, 'Operation cand only be performed by the selected evaluator');
+        activeTasks[taskIndex].status = TaskStatus.Finished;
+        
+        token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].freelancerPayout);
+        token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].evaluatorPayout);
+        token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
+        
+        inactiveTasks.push(activeTasks[taskIndex]);
+        activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+    }
+
+    // manager wins
+    function eGiveVerdictForManager(uint taskId) public {
+        require(users[msg.sender].role == Role.Evaluator, 'Operation can only be performed by an evaluator');
+        uint taskIndex = getActiveTaskIndex(taskId);
+        require(activeTasks[taskIndex].status == TaskStatus.WaitingEvaluation, 'Task not awaiting evaluation');
+        require(activeTasks[taskIndex].evaluatorAddress == msg.sender, 'Operation cand only be performed by the selected evaluator');
+        activeTasks[taskIndex].status = TaskStatus.Finished;
+        
+        token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].freelancerPayout);
+        token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
+        token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
+        
+        inactiveTasks.push(activeTasks[taskIndex]);
+        activeTasks[taskIndex] = activeTasks[activeTasks.length - 1];
+    }
+
 /*
     function setFirstName(address _address, string memory _fName) public {
         Persons[_address]._firstName = _fName;
