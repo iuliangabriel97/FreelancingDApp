@@ -58,7 +58,6 @@
             size="lg"
           >Register as Evaluator</b-button>
         </b-button-group>
-
         <div class="mt-2">
           <b-form-input v-model="username" placeholder="Enter your name"></b-form-input>
         </div>
@@ -96,8 +95,10 @@ export default {
         .register(username, 0, function(err, res) {
           console.log(err, res);
           if (err == null) {
-            document.getElementById("txnotification").innerText =
-              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+            document.getElementById("txnotification").innerHTML =
+              "Transaction available at <a href='https://ropsten.etherscan.io/tx/" +
+              res
+            +"'>https://ropsten.etherscan.io/tx/" + res + "</a>";
           } else {
             document.getElementById("txnotification").innerText =
               "Error: " + err.message;
@@ -114,8 +115,10 @@ export default {
         .register(username, 1, function(err, res) {
           console.log(err, res);
           if (err == null) {
-            document.getElementById("txnotification").innerText =
-              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+            document.getElementById("txnotification").innerHTML =
+              "Transaction available at <a href='https://ropsten.etherscan.io/tx/" +
+              res
+            +"'>https://ropsten.etherscan.io/tx/" + res + "</a>";
           } else {
             document.getElementById("txnotification").innerText =
               "Error: " + err.message;
@@ -131,8 +134,10 @@ export default {
         .register(username, 2, function(err, res) {
           console.log(err, res);
           if (err == null) {
-            document.getElementById("txnotification").innerText =
-              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+            document.getElementById("txnotification").innerHTML =
+              "Transaction available at <a href='https://ropsten.etherscan.io/tx/" +
+              res
+            +"'>https://ropsten.etherscan.io/tx/" + res + "</a>";
           } else {
             document.getElementById("txnotification").innerText =
               "Error: " + err.message;
@@ -141,6 +146,10 @@ export default {
     },
     redirectToDashboard: function(dashboard) {
       this.$router.push({ path: "/" + dashboard });
+    },
+    test: function() {
+      console.log("Test");
+      
     }
   }
 };
