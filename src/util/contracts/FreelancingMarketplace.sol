@@ -274,6 +274,24 @@ constructor(address _tokenAddress) public {
         return activeTasks[taskIndex].applicants;
     }
 
+    function mGetEvaluators() public view returns (address[] memory) {
+        require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
+        uint numberOfEvaluators = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role == Role.Evaluator) {
+                numberOfEvaluators++;
+            }
+        }
+        address[] memory evaluators = new address[](numberOfEvaluators);
+        uint counter = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role == Role.Evaluator) {
+                evaluators[counter++] = userList[i];
+            }
+        }
+        return evaluators;
+    }
+
     function mChooseFreelancer(uint taskId, address freelancerAddress) public {
         require(users[msg.sender].role == Role.Manager, 'Operation can only be performed by a manager');
         require(users[freelancerAddress].role == Role.Freelancer, 'Chosen freelancer does not have a freelancer role');
@@ -310,11 +328,11 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].freelancerPayout);
         token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
         
-        if (activeTasks[taskIndex].managerAddress < 10) {
+        if (users[activeTasks[taskIndex].managerAddress].reputation < 10) {
             users[activeTasks[taskIndex].managerAddress].reputation += 1;
         }
 
-        if (activeTasks[taskIndex].freelancerAddress < 10) {
+        if (users[activeTasks[taskIndex].freelancerAddress].reputation < 10) {
             users[activeTasks[taskIndex].freelancerAddress].reputation += 1;
         }
 
@@ -445,11 +463,11 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].freelancerAddress, activeTasks[taskIndex].evaluatorPayout);
         token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
         
-        if (activeTasks[taskIndex].managerAddress > 1) {
+        if (users[activeTasks[taskIndex].managerAddress].reputation > 1) {
             users[activeTasks[taskIndex].managerAddress].reputation -= 1;
         }
 
-        if (activeTasks[taskIndex].freelancerAddress < 10) {
+        if (users[activeTasks[taskIndex].freelancerAddress].reputation < 10) {
             users[activeTasks[taskIndex].freelancerAddress].reputation += 1;
         }
 
@@ -470,11 +488,11 @@ constructor(address _tokenAddress) public {
         token.transfer(activeTasks[taskIndex].managerAddress, activeTasks[taskIndex].evaluatorPayout);
         token.transfer(activeTasks[taskIndex].evaluatorAddress, activeTasks[taskIndex].evaluatorPayout);
         
-        if (activeTasks[taskIndex].managerAddress < 10) {
+        if (users[activeTasks[taskIndex].managerAddress].reputation < 10) {
             users[activeTasks[taskIndex].managerAddress].reputation += 1;
         }
 
-        if (activeTasks[taskIndex].freelancerAddress > 1) {
+        if (users[activeTasks[taskIndex].freelancerAddress].reputation > 1) {
             users[activeTasks[taskIndex].freelancerAddress].reputation -= 1;
         }
 

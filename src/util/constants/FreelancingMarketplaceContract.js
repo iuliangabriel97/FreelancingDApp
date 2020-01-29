@@ -1,264 +1,81 @@
-const address = '0x0DCd2F752394c41875e259e00bb44fd505297caF'
+const address = '0x2773c1F6137721BE8ac031458534409969BB1849'
 const ABI = [
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "fApplyForTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "notificationMessage",
-				"type": "string"
-			}
-		],
-		"name": "fSetTaskComplete",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "mAcceptTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "freelancerAddress",
-				"type": "address"
-			}
-		],
-		"name": "mChooseFreelancer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "evaluatorAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "title",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "domain",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "estResolveTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "estEvalTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "freelancerPay",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "evaluatorPay",
-				"type": "uint256"
-			}
-		],
-		"name": "mCreateTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "mRequestEvaluation",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "role",
-				"type": "uint256"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_tokenAddress",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
 	{
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "fallback"
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
 	},
 	{
 		"constant": true,
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
 			}
 		],
-		"name": "debug_getTask",
+		"name": "allowance",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "managerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "freelancerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "evaluatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "domain",
-						"type": "string"
-					},
-					{
-						"internalType": "enum FreelancingMarketplace.TaskStatus",
-						"name": "status",
-						"type": "uint8"
-					},
-					{
-						"internalType": "address[]",
-						"name": "applicants",
-						"type": "address[]"
-					},
-					{
-						"internalType": "string",
-						"name": "notification",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedResolveTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedEvaluationTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "freelancerPayout",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "evaluatorPayout",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct FreelancingMarketplace.Task",
-				"name": "task",
-				"type": "tuple"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -266,9 +83,41 @@ const ABI = [
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
-		"inputs": [],
-		"name": "debug_myAllowance",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -283,25 +132,10 @@ const ABI = [
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "debug_myBalance",
+		"name": "decimals",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "debug_myRole",
-		"outputs": [
-			{
-				"internalType": "enum FreelancingMarketplace.Role",
+				"internalType": "uint8",
 				"name": "",
 				"type": "uint8"
 			}
@@ -311,107 +145,66 @@ const ABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "fGetActiveTasksNumber",
-		"outputs": [
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "subtractedValue",
 				"type": "uint256"
 			}
 		],
+		"name": "decreaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "increaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskIndex",
-				"type": "uint256"
-			}
-		],
-		"name": "fGetTaskByIndex",
+		"inputs": [],
+		"name": "name",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "managerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "freelancerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "evaluatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "domain",
-						"type": "string"
-					},
-					{
-						"internalType": "enum FreelancingMarketplace.TaskStatus",
-						"name": "status",
-						"type": "uint8"
-					},
-					{
-						"internalType": "address[]",
-						"name": "applicants",
-						"type": "address[]"
-					},
-					{
-						"internalType": "string",
-						"name": "notification",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedResolveTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedEvaluationTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "freelancerPayout",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "evaluatorPayout",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct FreelancingMarketplace.Task",
+				"internalType": "string",
 				"name": "",
-				"type": "tuple"
+				"type": "string"
 			}
 		],
 		"payable": false,
@@ -421,7 +214,22 @@ const ABI = [
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "mGetActiveTasksNumber",
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalSupply",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -434,117 +242,60 @@ const ABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "taskId",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"name": "mGetTaskApplicants",
+		"name": "transfer",
 		"outputs": [
 			{
-				"internalType": "address[]",
+				"internalType": "bool",
 				"name": "",
-				"type": "address[]"
+				"type": "bool"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "taskIndex",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"name": "mGetTaskByIndex",
+		"name": "transferFrom",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "managerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "freelancerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "evaluatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "domain",
-						"type": "string"
-					},
-					{
-						"internalType": "enum FreelancingMarketplace.TaskStatus",
-						"name": "status",
-						"type": "uint8"
-					},
-					{
-						"internalType": "address[]",
-						"name": "applicants",
-						"type": "address[]"
-					},
-					{
-						"internalType": "string",
-						"name": "notification",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedResolveTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "estimatedEvaluationTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "freelancerPayout",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "evaluatorPayout",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct FreelancingMarketplace.Task",
+				"internalType": "bool",
 				"name": "",
-				"type": "tuple"
+				"type": "bool"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
