@@ -62,8 +62,17 @@ let getWeb3 = new Promise(function (resolve, reject) {
         if (err) {
           reject(new Error('Unable to retrieve balance for address: ' + result.coinbase))
         } else {
-          var balance = res.toString()
+          var balance = res
           result = Object.assign({}, result, { balance })
+          resolve(result)
+        }
+      })
+      tokenContractInstance.decimals(result.decimals, function (err, res) {
+        if (err) {
+          reject(new Error('Unable to retrieve decimals for token.'))
+        } else {
+          var decimals = res
+          result = Object.assign({}, result, { decimals })
           resolve(result)
         }
       })

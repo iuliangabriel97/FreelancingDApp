@@ -9,7 +9,7 @@
       </p>
       <p>Network: {{ network }}</p>
       <p>Account: {{ coinbase }}</p>
-      <p>Balance: {{ balance }} FMLTKN</p>
+      <p>Balance: {{ balance / (10**decimals) }} FMLTKN</p>
     </div>
     <b-jumbotron>
       <template v-slot:header>Freelancing Marketplace</template>
@@ -40,7 +40,7 @@
         </b-button-group>
 
         <div class="mt-2">
-          <b-form-input v-model="username" placeholder="Enter your name"></b-form-input>
+          <b-form-input placeholder="Enter your name"></b-form-input> <!-- v-model="username"-->
         </div>
       </div>
     </b-jumbotron>
@@ -57,7 +57,8 @@ export default {
     isInjected: state => state.web3.isInjected,
     network: state => NETWORKS[state.web3.networkId],
     coinbase: state => state.web3.coinbase,
-    balance: state => state.web3.balance
+    balance: state => state.web3.balance,
+    decimals: state => state.web3.decimals
   }),
   methods: {
     redirectToManagerPage: function(event) {
