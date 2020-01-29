@@ -1,4 +1,4 @@
-const address = '0x2773c1F6137721BE8ac031458534409969BB1849'
+const address = '0x0E3D9999dD40181021E93aab881EF118beA3ffE2'
 const ABI = [
 	{
 		"constant": false,
@@ -487,6 +487,69 @@ const ABI = [
 				"internalType": "struct FreelancingMarketplace.Task",
 				"name": "",
 				"type": "tuple"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUserName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUserReputation",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUserRole",
+		"outputs": [
+			{
+				"internalType": "enum FreelancingMarketplace.Role",
+				"name": "",
+				"type": "uint8"
 			}
 		],
 		"payable": false,

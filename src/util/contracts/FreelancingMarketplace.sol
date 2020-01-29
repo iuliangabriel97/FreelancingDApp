@@ -26,7 +26,7 @@ contract FreelancingMarketplace
     struct User {
         address userAddress;
         string name;
-        int256 reputation;
+        uint reputation;
         Role role;
     }
 
@@ -215,6 +215,18 @@ constructor(address _tokenAddress) public {
     function getActiveTaskById(uint taskId) public view returns (Task memory) {
         uint taskIndex = getActiveTaskIndex(taskId);
         return activeTasks[taskIndex];
+    }
+
+    function getUserName(address userAddress) public view returns (string memory) {
+        return users[userAddress].name;
+    }
+    
+    function getUserReputation(address userAddress) public view returns (uint) {
+        return users[userAddress].reputation;
+    }
+    
+    function getUserRole(address userAddress) public view returns (Role) {
+        return users[userAddress].role;
     }
 
     // manager
