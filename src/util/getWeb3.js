@@ -67,6 +67,12 @@ let getWeb3 = new Promise(function (resolve, reject) {
           resolve(result)
         }
       })
+    })
+  }).then(result => {
+    return new Promise(function (resolve, reject) {
+      // Retrieve balance for coinbase)
+      var tokenContract = web3.eth.contract(tokenABI)
+      var tokenContractInstance = tokenContract.at('0x5f40c64412eb356c56699821fe6c2ba065df5c35')
       tokenContractInstance.decimals(result.decimals, function (err, res) {
         if (err) {
           reject(new Error('Unable to retrieve decimals for token.'))

@@ -1,7 +1,7 @@
 <template>
-  <div class="metamask-info">
-    <div>
-      <p v-if="isInjected" id="has-metamask">
+  <div>
+    <div class="metamask-info">
+      <p v-if="isInjected" id="has-metamask" class="metamask-status">
         <i aria-hidden="true" class="fa fa-check"></i> Metamask installed
       </p>
       <p v-else id="no-metamask">
@@ -9,7 +9,7 @@
       </p>
       <p>Network: {{ network }}</p>
       <p>Account: {{ coinbase }}</p>
-      <p>Balance: {{ balance / (10**decimals) }} FMLTKN</p>
+      <p>Balance: {{ balance / (10**decimals) }} FMLTKN [{{decimals}} dec]</p>
     </div>
     <b-jumbotron>
       <template v-slot:header>Freelancing Marketplace</template>
@@ -24,17 +24,17 @@
         <b-button-group>
           <b-button
             v-on:click="redirectToManagerPage"
-            variant="success"
+            variant="danger"
             size="lg"
           >Register as Manager</b-button>
           <b-button
             v-on:click="redirectToFreelancerPage"
-            variant="info"
+            variant="success"
             size="lg"
           >Register as Freelancer</b-button>
           <b-button
             v-on:click="redirectToEvaluatorPage"
-            variant="warning"
+            variant="info"
             size="lg"
           >Register as Evaluator</b-button>
         </b-button-group>
@@ -78,8 +78,17 @@ export default {
 </script>
 
 <style scoped>
+
+.metamask-info p {
+  font-family: monospace;
+  margin: 0;
+}
+
 .metamask-info {
-  text-align: center;
+  margin: 8px;
+  padding: 8px;
+  border: solid 1px lightgray;
+  text-align: left;
 }
 #has-metamask {
   color: green;
@@ -87,4 +96,9 @@ export default {
 #no-metamask {
   color: red;
 }
+
+.metamask-status {
+  font-weight: bold;
+}
+
 </style>
