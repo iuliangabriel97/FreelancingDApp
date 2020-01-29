@@ -1,5 +1,25 @@
 <template>
   <div>
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand">Freelancing Marketplace</a>
+      <form class="form">
+        <b-button
+          class="btn btn-sm btn-danger"
+          type="button"
+          v-on:click="redirectToDashboard('manager')"
+        >Manager Dashboard</b-button>
+        <b-button
+          class="btn btn-sm btn-success"
+          type="button"
+          v-on:click="redirectToDashboard('freelancer')"
+        >Freelancer Dashboard</b-button>
+        <b-button
+          class="btn btn-sm btn-info"
+          type="button"
+          v-on:click="redirectToDashboard('evaluator')"
+        >Evaluator Dashboard</b-button>
+      </form>
+    </nav>
     <div class="metamask-info">
       <p v-if="isInjected" id="has-metamask" class="metamask-status">
         <i aria-hidden="true" class="fa fa-check"></i> Metamask installed
@@ -42,6 +62,8 @@
         <div class="mt-2">
           <b-form-input v-model="username" placeholder="Enter your name"></b-form-input>
         </div>
+        <hr />
+        <div id="txnotification"></div>
       </div>
     </b-jumbotron>
   </div>
@@ -60,35 +82,65 @@ export default {
     balance: state => state.web3.balance,
     decimals: state => state.web3.decimals
   }),
-  data: function () {
+  data: function() {
     return {
-      count: ''
-    }
+      count: ""
+    };
   },
   methods: {
     registerAsManager: function(username) {
-        console.log("register as manager: " + username)
-        console.log(this.$store.state.contractInstance())
-          this.$store.state.contractInstance().register(username, 0, function(err, res) {
-        console.log(err, res);
-      });
+      console.log("register as manager: " + username);
+      console.log(this.$store.state.contractInstance());
+      this.$store.state
+        .contractInstance()
+        .register(username, 0, function(err, res) {
+          console.log(err, res);
+          if (err == null) {
+            document.getElementById("txnotification").innerText =
+              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+          } else {
+            document.getElementById("txnotification").innerText =
+              "Error: " + err.message;
+          }
+        });
+      document.getElementById;
       //this.$router.push({ path: "/manager" });
     },
     registerAsFreelancer: function(username) {
-        console.log("register as freelancer: " + username)
-        console.log(this.$store.state.contractInstance())
-          this.$store.state.contractInstance().register(username, 1, function(err, res) {
-        console.log(err, res);
-      });
+      console.log("register as freelancer: " + username);
+      console.log(this.$store.state.contractInstance());
+      this.$store.state
+        .contractInstance()
+        .register(username, 1, function(err, res) {
+          console.log(err, res);
+          if (err == null) {
+            document.getElementById("txnotification").innerText =
+              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+          } else {
+            document.getElementById("txnotification").innerText =
+              "Error: " + err.message;
+          }
+        });
       //this.$router.push({ path: "/evaluator" });
     },
     registerAsEvaluator: function(username) {
-        console.log("register as evaluator: " + username)
-        console.log(this.$store.state.contractInstance())
-          this.$store.state.contractInstance().register(username, 2, function(err, res) {
-        console.log(err, res);
-      });
-      //this.$router.push({ path: "/evaluator" });
+      console.log("register as evaluator: " + username);
+      console.log(this.$store.state.contractInstance());
+      this.$store.state
+        .contractInstance()
+        .register(username, 2, function(err, res) {
+          console.log(err, res);
+          if (err == null) {
+            document.getElementById("txnotification").innerText =
+              "Transaction available at https://ropsten.etherscan.io/tx/" + res;
+          } else {
+            document.getElementById("txnotification").innerText =
+              "Error: " + err.message;
+          }
+        });
+    },
+    redirectToDashboard: function(dashboard) {
+      this.$router.push({ path: "/" + dashboard });
     }
   }
 };
