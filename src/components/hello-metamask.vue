@@ -23,24 +23,24 @@
       <div class="mt-3">
         <b-button-group>
           <b-button
-            v-on:click="redirectToManagerPage"
+            v-on:click="registerAsManager(username)"
             variant="danger"
             size="lg"
           >Register as Manager</b-button>
           <b-button
-            v-on:click="redirectToFreelancerPage"
+            v-on:click="registerAsFreelancer(username)"
             variant="success"
             size="lg"
           >Register as Freelancer</b-button>
           <b-button
-            v-on:click="redirectToEvaluatorPage"
+            v-on:click="registerAsEvaluator(username)"
             variant="info"
             size="lg"
           >Register as Evaluator</b-button>
         </b-button-group>
 
         <div class="mt-2">
-          <b-form-input placeholder="Enter your name"></b-form-input> <!-- v-model="username"-->
+          <b-form-input v-model="username" placeholder="Enter your name"></b-form-input>
         </div>
       </div>
     </b-jumbotron>
@@ -60,25 +60,41 @@ export default {
     balance: state => state.web3.balance,
     decimals: state => state.web3.decimals
   }),
+  data: function () {
+    return {
+      count: ''
+    }
+  },
   methods: {
-    redirectToManagerPage: function(event) {
-      this.$router.push({ path: "/manager" });
-      this.$store.contractInstance.register(username, function(err, res) {
+    registerAsManager: function(username) {
+        console.log("register as manager: " + username)
+        console.log(this.$store.state.contractInstance())
+          this.$store.state.contractInstance().register(username, 0, function(err, res) {
         console.log(err, res);
       });
+      //this.$router.push({ path: "/manager" });
     },
-    redirectToFreelancerPage: function(event) {
-      this.$router.push("/freelancer");
+    registerAsFreelancer: function(username) {
+        console.log("register as freelancer: " + username)
+        console.log(this.$store.state.contractInstance())
+          this.$store.state.contractInstance().register(username, 1, function(err, res) {
+        console.log(err, res);
+      });
+      //this.$router.push({ path: "/evaluator" });
     },
-    redirectToEvaluatorPage: function(event) {
-      this.$router.push("/evaluator");
+    registerAsEvaluator: function(username) {
+        console.log("register as evaluator: " + username)
+        console.log(this.$store.state.contractInstance())
+          this.$store.state.contractInstance().register(username, 2, function(err, res) {
+        console.log(err, res);
+      });
+      //this.$router.push({ path: "/evaluator" });
     }
   }
 };
 </script>
 
 <style scoped>
-
 .metamask-info p {
   font-family: monospace;
   margin: 0;
@@ -100,5 +116,4 @@ export default {
 .metamask-status {
   font-weight: bold;
 }
-
 </style>

@@ -15,6 +15,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
   var web3js = window.web3
   if (typeof web3js !== 'undefined') {
     var web3 = new Web3(web3js.currentProvider)
+    web3.eth.defaultAccount = web3.eth.accounts[0]
     resolve({
       injectedWeb3: web3.isConnected(),
       web3() {
