@@ -1,190 +1,5 @@
-const address = '0x0E3D9999dD40181021E93aab881EF118beA3ffE2'
+const address = '0xDd8d6AC6E195E3B7bbcA8f4250D089C7cf22ae9f'
 const ABI = [
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "eGiveVerdictForFreelancer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "eGiveVerdictForManager",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "fApplyForTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "notificationMessage",
-				"type": "string"
-			}
-		],
-		"name": "fSetTaskComplete",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "mAcceptTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "freelancerAddress",
-				"type": "address"
-			}
-		],
-		"name": "mChooseFreelancer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "evaluatorAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "title",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "domain",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "estResolveTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "estEvalTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "freelancerPay",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "evaluatorPay",
-				"type": "uint256"
-			}
-		],
-		"name": "mCreateTask",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "taskId",
-				"type": "uint256"
-			}
-		],
-		"name": "mRequestEvaluation",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "role",
-				"type": "uint256"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
 	{
 		"inputs": [
 			{
@@ -201,6 +16,117 @@ const ABI = [
 		"payable": true,
 		"stateMutability": "payable",
 		"type": "fallback"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "debug_getAllEvaluators",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reputation",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum FreelancingMarketplace.Role",
+						"name": "role",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct FreelancingMarketplace.User[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "debug_getAllFreelancers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reputation",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum FreelancingMarketplace.Role",
+						"name": "role",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct FreelancingMarketplace.User[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "debug_getAllManagers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reputation",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum FreelancingMarketplace.Role",
+						"name": "role",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct FreelancingMarketplace.User[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -356,6 +282,51 @@ const ABI = [
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			}
+		],
+		"name": "eGiveVerdictForFreelancer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			}
+		],
+		"name": "eGiveVerdictForManager",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			}
+		],
+		"name": "fApplyForTask",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "fGetActiveTasks",
@@ -398,6 +369,26 @@ const ABI = [
 		],
 		"payable": false,
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "notificationMessage",
+				"type": "string"
+			}
+		],
+		"name": "fSetTaskComplete",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -557,6 +548,91 @@ const ABI = [
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			}
+		],
+		"name": "mAcceptTask",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "freelancerAddress",
+				"type": "address"
+			}
+		],
+		"name": "mChooseFreelancer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "evaluatorAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "domain",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "estResolveTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "estEvalTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "freelancerPay",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "evaluatorPay",
+				"type": "uint256"
+			}
+		],
+		"name": "mCreateTask",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "mGetActiveTasks",
@@ -605,6 +681,41 @@ const ABI = [
 		],
 		"payable": false,
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "taskId",
+				"type": "uint256"
+			}
+		],
+		"name": "mRequestEvaluation",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "role",
+				"type": "uint256"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

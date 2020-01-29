@@ -191,6 +191,60 @@ constructor(address _tokenAddress) public {
         return users[msg.sender].role;
     }
 
+    function debug_getAllManagers() public view returns(User[] memory) {
+        uint number = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Manager) {
+                number++;
+            }
+        }
+
+        User[] memory foundUsers = new User[](number);
+        uint counter = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Manager) {
+                foundUsers[counter++] = users[userList[i]];
+            }
+        }
+        return foundUsers;
+    }
+    
+    function debug_getAllFreelancers() public view returns(User[] memory) {
+        uint number = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Freelancer) {
+                number++;
+            }
+        }
+
+        User[] memory foundUsers = new User[](number);
+        uint counter = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Freelancer) {
+                foundUsers[counter++] = users[userList[i]];
+            }
+        }
+        return foundUsers;
+    }
+    
+    function debug_getAllEvaluators() public view returns(User[] memory) {
+        uint number = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Evaluator) {
+                number++;
+            }
+        }
+
+        User[] memory foundUsers = new User[](number);
+        uint counter = 0;
+        for (uint i = 0; i < userList.length; i++) {
+            if (users[userList[i]].role  == Role.Evaluator) {
+                foundUsers[counter++] = users[userList[i]];
+            }
+        }
+        return foundUsers;
+    }
+
     function debug_getTask(uint taskId) public view returns (Task memory task) {
         require(taskId < activeTasks.length + inactiveTasks.length, 'Task ID out of bounds');
         for (uint i = 0; i < activeTasks.length; i++) {
